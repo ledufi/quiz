@@ -28,3 +28,7 @@ footer {
 nav span {
 	display:block;
 }
+#ErrorMsgs{
+	color:red;
+	list-style:none;
+}
