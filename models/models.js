@@ -17,7 +17,7 @@ var port = ( url[5] || null);
 var host = ( url[4] || null);
 var storage = process.env.DATABASE_STORAGE;
 
-console.log ( JSON.stringify(url) );
+console.log ( 'database init with :' + JSON.stringify(url) );
 var sequelize = new Sequelize ( DB_name, user, pwd , 
 	{ dialect : protocol,
 	protocol:protocol,
