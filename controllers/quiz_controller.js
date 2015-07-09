@@ -14,6 +14,7 @@ exports.load = function (req, res, next, quizId){
 
 exports.show = function (req,res){	
 	res.render('quizes/show',{ quiz: req.quiz, errors:[] });
+	console.log ('mostrar : ' + JSON.stringify( req.quiz ) );
 };
 
 exports.answer = function (req,res){	
@@ -57,7 +58,7 @@ exports.create = function (req, res){
 				console.log ('hay error:' + JSON.stringify(err) );
 			}
 			else {				
-					quiz.save({fields:["pregunta","respuesta"]})
+					quiz.save({fields:["pregunta","respuesta","categoria"]})
 					.then (
 						function (){
 							res.redirect('/quizes');
@@ -73,7 +74,8 @@ exports.edit = function(req, res){
 exports.update = function (req,res){
 	req.quiz.pregunta = req.body.quiz.pregunta;
 	req.quiz.respuesta = req.body.quiz.respuesta;
-	console.log ('update');
+	req.quiz.categoria = req.body.quiz.categoria;
+	console.log ('UPDATE WITH = ' + JSON.stringify(req.quiz) );
 	req.quiz.validate()
 	.then ( 
 		function (error){
@@ -82,7 +84,7 @@ exports.update = function (req,res){
 			}
 			else{
 				req.quiz
-				.save( {fields: ["pregunta", "respuesta"]}) 
+				.save( {fields: ["pregunta", "respuesta","categoria"]}) 
 				.then( function (){
 					res.redirect('/quizes');
 				});
@@ -96,7 +98,6 @@ exports.destroy = function(req, res, next){
 	req.quiz.destroy()
 	.then( function(){
 		res.redirect('/quizes');
-
 
 	}).catch(function (error){ next(error)});
 }
