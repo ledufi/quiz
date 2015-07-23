@@ -9,8 +9,17 @@
   <body>
   <div id='page-wrap'>
 	<header>
+		<% if (!session.user){ %>
+			<span class='right'>
+			<a href='/login'>login</a>
+			</span>
+
+		<%}else{%>
+			<span class='right'> <%=session.user.username%> <a href='/logout'>Logout</a></span>
+		<%}%>
+	
 		<h2> Quiz<span>: el juego de las preguntas</span></h2>
-	</header>   
+	</header>
 	<nav class='main' id='n1' role='navigation' > 
 		<span> <a href='/' >Inicio </a>		</span>
 		<span> <a href='/quizes'>Preguntas </a> </span>
