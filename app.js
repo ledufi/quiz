@@ -28,13 +28,43 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use ( partials() );
 
+
+
 app.use( function (req, res, next){
+	if ( !req.session.redir){
+		req.session.redir = '/';
+	}
+	
 	if (!req.path.match(/\/login|\/logout/)){
 		req.session.redir = req.path;
 		console.log('req.dir');
 	}
 	console.log('session var = ' + JSON.stringify(req.session));
 	res.locals.session =  req.session;
+	next();
+});
+
+
+app.use( function ( req, res, next ) {
+	
+if (req.session.user){
+	var currentTime = new Date ();
+	if (!req.session.lastUpdate){
+		req.session.lastUpdate = currentTime;
+	}	
+	console.log ('\nreq.session.lastUpdate:' + req.session.lastUpdate);
+	var timeAllowed =  new Date( new Date(req.session.lastUpdate).getTime() + 2*60000 );
+	console.log ( '\ntimeAllowed: ' + timeAllowed);
+
+	if ( currentTime < timeAllowed){
+		req.session.lastUpdate = currentTime;
+	}
+	else {
+			delete req.session.lastUpdate;
+			delete req.session.user;
+			res.redirect ( '/login' );
+	}
+}
 	next();
 });
 
@@ -74,6 +104,5 @@ app.use(function(err, req, res, next) {
 	errors:[]
   });
 });
-
 
 module.exports = app;

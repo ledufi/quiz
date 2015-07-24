@@ -44,3 +44,15 @@ exports.loginRequired = function (req, res, next){
 		res.redirect('/login');
 	}
 }
+
+exports.autoLogOut = function ( req, res, next ) {
+	var currentTime = new Date ();
+	var timeAllowed =  new Date(req.session.lastUpdate.getTime() + 2*60000 );
+	if ( timeAllowed >= currentTime){
+		req.session.lastUpdate = currentTime;
+	}
+	else {
+			delete req.session.user;
+			res.redirect ( '/login' );
+	}	
+}
