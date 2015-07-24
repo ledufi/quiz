@@ -7,5 +7,10 @@
 <p> <a href="/quizes/<%= quiz.id %>/comments/new">Crear Comentario</a> </p>
 <p> <strong>Comentarios:</strong></p>
 <%for( index in quiz.Comments){ %>
-	<p>- <%=quiz.Comments[index].texto%> </p>
+	<%if(session.user || quiz.Comments[index].publicado) {%>
+		<p>- <%=quiz.Comments[index].texto%> </p>
+	<%}%>
+	<%if(session.user && !quiz.Comments[index].publicado) {%>
+		<a href="/quizes/<%= quiz.id %>/comments/<%= quiz.Comments[index].id %>/publish" >publicar</a> 
+	<%}%>
 <%}%>

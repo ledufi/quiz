@@ -9,6 +9,8 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Quiz', errors:[] });
 });
 router.param('quizId', quizController.load);
+router.param('commentId', commentController.load);
+
 router.get('/quizes', quizController.index);
 router.get('/quizes/new', sessionController.loginRequired,quizController.new);
 router.post('/quizes/create', sessionController.loginRequired,quizController.create);
@@ -19,8 +21,8 @@ router.get('/quizes/:quizId(\\d+)', quizController.show);
 router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
 
 router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);
-router.post('/quizes/:quizId(\\d+)/comments/', commentController.create);
-
+router.post('/quizes/:quizId(\\d+)/comments/', sessionController.loginRequired,commentController.create);
+router.get('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish', sessionController.loginRequired, commentController.publish);
 //definición de las rutas de login
 router.get('/login', sessionController.new);
 router.post('/login', sessionController.create);

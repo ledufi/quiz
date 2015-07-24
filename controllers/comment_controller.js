@@ -24,3 +24,35 @@ exports.create = function (req, res, next){
 			}
 		}).catch(function (error){ next(error)});
 };
+
+exports.publish = function (req,res,next){
+	req.comment.publicado = true;
+	req.comment.save( {fields: ["publicado"]})
+		.then( function () { res.redirect('/quizes/' + req.params.quizId); })
+		.catch( function (error){ next(error); });
+}
+
+exports.load = function ( req,res,next,commentId ) {
+console.log ( 'comment:' + commentId );
+	models.Comment.find ({ 
+		where:{  
+			id: Number(commentId)
+		}
+		})
+		.then ( function (comment){
+			console.log ( 'comment:' + comment );
+			if ( comment ){
+				req.comment = comment;
+				next();
+			}
+			else {
+				next( new Error ( 'no existe el comentario'));
+			}
+		})
+		.catch( function (error){
+			console.log ('error load comment');
+			next(error);
+		});
+	
+}
+
